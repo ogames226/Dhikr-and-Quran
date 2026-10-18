@@ -1,0 +1,6 @@
+{
+  "name": "ذكر وقرآن",
+  "description": "موقع وتطبيق إسلامي شامل: القرآن الكريم تلاوة وتفسيراً، أوقات الصلاة الدقيقة، حصن المسلم للأذكار، والمسبحة الإلكترونية.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

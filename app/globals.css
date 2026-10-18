@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@300;400;500;600;700;800;900&family=Scheherazade+New:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap');
+
+@layer base {
+  :root {
+    --font-cairo: 'Cairo', system-ui, -apple-system, sans-serif;
+    --font-amiri-quran: 'Amiri Quran', 'Amiri', serif;
+    --font-amiri: 'Amiri', serif;
+    --font-scheherazade: 'Scheherazade New', 'Amiri', serif;
+    --font-tajawal: 'Tajawal', sans-serif;
+  }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
+    direction: rtl;
+    text-align: right;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: text;
+  }
+}
+
+/* Custom Quranic Font Utilities */
+.font-quran {
+  font-family: 'Amiri Quran', 'Amiri', 'Scheherazade New', serif;
+  line-height: 2.3;
+  text-rendering: optimizeLegibility;
+}
+
+.font-scheherazade {
+  font-family: 'Scheherazade New', 'Amiri', serif;
+  line-height: 2.3;
+}
+
+.font-cairo {
+  font-family: 'Cairo', sans-serif;
+}
+
+.font-tajawal {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Islamic Geometric Background Pattern */
+.bg-islamic-pattern {
+  background-color: transparent;
+  background-image: radial-gradient(rgba(201, 162, 39, 0.08) 1.5px, transparent 1.5px), radial-gradient(rgba(15, 92, 77, 0.06) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+.dark .bg-islamic-pattern {
+  background-image: radial-gradient(rgba(201, 162, 39, 0.12) 1.5px, transparent 1.5px), radial-gradient(rgba(45, 166, 142, 0.08) 1.5px, transparent 1.5px);
+}
+
+.bg-islamic-ornament {
+  background-image: repeating-linear-gradient(45deg, rgba(201, 162, 39, 0.04) 0px, rgba(201, 162, 39, 0.04) 2px, transparent 2px, transparent 14px),
+                    repeating-linear-gradient(-45deg, rgba(201, 162, 39, 0.04) 0px, rgba(201, 162, 39, 0.04) 2px, transparent 2px, transparent 14px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 92, 77, 0.25);
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(201, 162, 39, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 92, 77, 0.5);
+}
+
+/* Ayah end ornament symbol */
+.ayah-number-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  margin: 0 0.35rem;
+  font-family: 'Amiri', 'Cairo', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #c9a227;
+  border: 1.5px solid #c9a227;
+  border-radius: 50%;
+  position: relative;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.12) 0%, transparent 80%);
+}
