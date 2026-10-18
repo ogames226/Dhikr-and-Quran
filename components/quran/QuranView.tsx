@@ -107,6 +107,8 @@ export const QuranView: React.FC = () => {
 
   // Identify which Surah is on the active Mushaf page
   const pageSurah = [...SURAHS_LIST].reverse().find(s => s.page <= activePageNumber) || SURAHS_LIST[0];
+  const nextSurahMeta = SURAHS_LIST.find(s => s.number === pageSurah.number + 1);
+  const prevSurahMeta = SURAHS_LIST.find(s => s.number === pageSurah.number - 1);
 
   // Fetch Surah text from alquran.cloud based on activeSurahNumber & scriptType
   const fetchSurahData = (surahNum: number) => {
@@ -662,62 +664,97 @@ export const QuranView: React.FC = () => {
         {quranViewMode === 'mushaf' && (
           <div className="p-3 sm:p-6 rounded-3xl bg-white dark:bg-[#0D221D] border border-gray-100 dark:border-white/10 shadow-sm space-y-4">
             
-            {/* Page Navigator bar with Night Filter & Zoom controls */}
-            <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-gray-50 dark:bg-[#122A24] border border-gray-200/50 dark:border-white/5">
+            {/* Page Navigator bar & Surah Flipping controls */}
+            <div className="space-y-2 p-3 rounded-2xl bg-gray-50 dark:bg-[#122A24] border border-gray-200/50 dark:border-white/5">
               
-              {/* Previous / Next page */}
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={() => handlePageChange(activePageNumber + 1)}
-                  disabled={activePageNumber >= 604}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white dark:bg-[#0D221D] shadow-sm disabled:opacity-40 font-bold text-xs hover:bg-[#0F5C4D] hover:text-white transition"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                  <span>الصفحة التالية ({activePageNumber + 1})</span>
-                </button>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                {/* Previous / Next page */}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => handlePageChange(activePageNumber + 1)}
+                    disabled={activePageNumber >= 604}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white dark:bg-[#0D221D] shadow-sm disabled:opacity-40 font-bold text-xs hover:bg-[#0F5C4D] hover:text-white transition"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                    <span>الصفحة التالية ({activePageNumber + 1})</span>
+                  </button>
 
-                <button
-                  onClick={() => handlePageChange(activePageNumber - 1)}
-                  disabled={activePageNumber <= 1}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white dark:bg-[#0D221D] shadow-sm disabled:opacity-40 font-bold text-xs hover:bg-[#0F5C4D] hover:text-white transition"
-                >
-                  <span>السابقة ({activePageNumber - 1})</span>
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
+                  <button
+                    onClick={() => handlePageChange(activePageNumber - 1)}
+                    disabled={activePageNumber <= 1}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white dark:bg-[#0D221D] shadow-sm disabled:opacity-40 font-bold text-xs hover:bg-[#0F5C4D] hover:text-white transition"
+                  >
+                    <span>السابقة ({activePageNumber - 1})</span>
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Page Number & Surah Indicator */}
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0F5C4D] dark:text-[#C9A227]">
+                  <BookOpen className="w-4 h-4" />
+                  <span>صفحة {activePageNumber} من 604</span>
+                  <span className="text-gray-400 font-normal">• {pageSurah.name} (جزء {pageSurah.juz})</span>
+                </div>
+
+                {/* Display Enhancers: Night Invert & Zoom */}
+                <div className="flex items-center gap-1.5">
+                  {/* Night reading mode button */}
+                  <button
+                    onClick={() => setMushafNightMode(!mushafNightMode)}
+                    title={mushafNightMode ? 'العودة لورق المصحف الطبيعي' : 'تفعيل وضع القراءة الليلية المريحة للعينين'}
+                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition border ${
+                      mushafNightMode
+                        ? 'bg-[#C9A227] text-[#081714] border-[#C9A227]'
+                        : 'bg-white dark:bg-[#0D221D] text-gray-700 dark:text-gray-200 border-gray-200 dark:border-white/10'
+                    }`}
+                  >
+                    {mushafNightMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+                    <span className="hidden sm:inline">{mushafNightMode ? 'ورق طبيعي' : 'قراءة ليلية'}</span>
+                  </button>
+
+                  {/* Zoom */}
+                  <button
+                    onClick={() => setMushafZoom(z => z >= 1.4 ? 1 : Number((z + 0.2).toFixed(1)))}
+                    title="تكبير الصفحة"
+                    className="px-2.5 py-1.5 rounded-xl bg-white dark:bg-[#0D221D] border border-gray-200 dark:border-white/10 text-xs font-bold flex items-center gap-1 hover:border-[#C9A227]"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5" />
+                    <span>{mushafZoom}×</span>
+                  </button>
+                </div>
               </div>
 
-              {/* Page Number & Surah Indicator */}
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0F5C4D] dark:text-[#C9A227]">
-                <BookOpen className="w-4 h-4" />
-                <span>صفحة {activePageNumber} من 604</span>
-                <span className="text-gray-400 font-normal">• {pageSurah.name} (جزء {pageSurah.juz})</span>
-              </div>
+              {/* Surah Flipping Row in Mushaf View */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-200/50 dark:border-white/5 text-xs">
+                <span className="text-gray-500 dark:text-gray-400 font-bold flex items-center gap-1">
+                  <span>قلب السور:</span>
+                </span>
+                
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      if (nextSurahMeta) handlePageChange(nextSurahMeta.page);
+                    }}
+                    disabled={pageSurah.number >= 114 || !nextSurahMeta}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-[#0D221D] text-[#0F5C4D] dark:text-[#C9A227] shadow-sm disabled:opacity-40 font-bold hover:bg-[#0F5C4D] hover:text-white transition border border-[#0F5C4D]/20"
+                    title={nextSurahMeta ? `الانتقال إلى بداية سورة ${nextSurahMeta.name} (صفحة ${nextSurahMeta.page})` : ''}
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                    <span>السورة التالية {nextSurahMeta ? `(${nextSurahMeta.name})` : ''}</span>
+                  </button>
 
-              {/* Display Enhancers: Night Invert & Zoom */}
-              <div className="flex items-center gap-1.5">
-                {/* Night reading mode button */}
-                <button
-                  onClick={() => setMushafNightMode(!mushafNightMode)}
-                  title={mushafNightMode ? 'العودة لورق المصحف الطبيعي' : 'تفعيل وضع القراءة الليلية المريحة للعينين'}
-                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition border ${
-                    mushafNightMode
-                      ? 'bg-[#C9A227] text-[#081714] border-[#C9A227]'
-                      : 'bg-white dark:bg-[#0D221D] text-gray-700 dark:text-gray-200 border-gray-200 dark:border-white/10'
-                  }`}
-                >
-                  {mushafNightMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-                  <span className="hidden sm:inline">{mushafNightMode ? 'ورق طبيعي' : 'قراءة ليلية'}</span>
-                </button>
-
-                {/* Zoom */}
-                <button
-                  onClick={() => setMushafZoom(z => z >= 1.4 ? 1 : Number((z + 0.2).toFixed(1)))}
-                  title="تكبير الصفحة"
-                  className="px-2.5 py-1.5 rounded-xl bg-white dark:bg-[#0D221D] border border-gray-200 dark:border-white/10 text-xs font-bold flex items-center gap-1 hover:border-[#C9A227]"
-                >
-                  <ZoomIn className="w-3.5 h-3.5" />
-                  <span>{mushafZoom}×</span>
-                </button>
+                  <button
+                    onClick={() => {
+                      if (prevSurahMeta) handlePageChange(prevSurahMeta.page);
+                    }}
+                    disabled={pageSurah.number <= 1 || !prevSurahMeta}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-[#0D221D] text-[#0F5C4D] dark:text-[#C9A227] shadow-sm disabled:opacity-40 font-bold hover:bg-[#0F5C4D] hover:text-white transition border border-[#0F5C4D]/20"
+                    title={prevSurahMeta ? `الانتقال إلى بداية سورة ${prevSurahMeta.name} (صفحة ${prevSurahMeta.page})` : ''}
+                  >
+                    <span>السورة السابقة {prevSurahMeta ? `(${prevSurahMeta.name})` : ''}</span>
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
 
             </div>

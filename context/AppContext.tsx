@@ -135,27 +135,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
     return 'light';
   });
-
   const [fontSize, setFontSize] = useState<'sm' | 'md' | 'lg' | 'xl' | '2xl'>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_fontSize') as 'sm' | 'md' | 'lg' | 'xl' | '2xl' | null;
-      if (saved) return saved;
+      return (localStorage.getItem('dq_fontSize') as any) || 'md';
     }
     return 'md';
   });
-
   const [fontFamily, setFontFamily] = useState<'amiri' | 'cairo' | 'scheherazade'>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_fontFamily') as 'amiri' | 'cairo' | 'scheherazade' | null;
-      if (saved) return saved;
+      return (localStorage.getItem('dq_fontFamily') as any) || 'amiri';
     }
     return 'amiri';
   });
-
   const [quranViewMode, setQuranViewMode] = useState<'text' | 'mushaf'>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_quranMode') as 'text' | 'mushaf' | null;
-      if (saved) return saved;
+      return (localStorage.getItem('dq_quranMode') as any) || 'text';
     }
     return 'text';
   });
@@ -169,9 +163,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentReciter, setCurrentReciter] = useState<Reciter>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_reciter');
-      if (saved) {
-        const found = RECITERS_LIST.find(r => r.id === saved);
+      const rId = localStorage.getItem('dq_reciter');
+      if (rId) {
+        const found = RECITERS_LIST.find(r => r.id === rId);
         if (found) return found;
       }
     }
@@ -191,59 +185,55 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const handleAudioEndedRef = useRef<() => void>(() => {});
 
-  // Bookmarks & Favorites with lazy initialization
+  // Bookmarks & Favorites with safe defaults
   const [bookmarks, setBookmarks] = useState<Bookmark[]>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_bookmarks');
-      if (saved) {
-        try { return JSON.parse(saved); } catch { /* ignore */ }
-      }
+      try {
+        const saved = localStorage.getItem('dq_bookmarks');
+        if (saved) return JSON.parse(saved);
+      } catch {}
     }
     return [];
   });
-
   const [lastRead, setLastRead] = useState<Bookmark | null>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_lastRead');
-      if (saved) {
-        try { return JSON.parse(saved); } catch { /* ignore */ }
-      }
+      try {
+        const saved = localStorage.getItem('dq_lastRead');
+        if (saved) return JSON.parse(saved);
+      } catch {}
     }
     return null;
   });
-
   const [favoriteAyahs, setFavoriteAyahs] = useState<{ surahNumber: number; ayahNumber: number; text: string; surahName: string }[]>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_favAyahs');
-      if (saved) {
-        try { return JSON.parse(saved); } catch { /* ignore */ }
-      }
+      try {
+        const saved = localStorage.getItem('dq_favAyahs');
+        if (saved) return JSON.parse(saved);
+      } catch {}
     }
     return [];
   });
 
-  // Masbaha with lazy initialization
+  // Masbaha with safe defaults
   const [masbahaCount, setMasbahaCount] = useState<number>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_masbaha_curr');
-      if (saved) return parseInt(saved, 10) || 0;
+      const val = localStorage.getItem('dq_masbaha_curr');
+      if (val) return Number(val);
     }
     return 0;
   });
-
   const [masbahaTotalToday, setMasbahaTotalToday] = useState<number>(() => {
     if (typeof window !== 'undefined') {
       const todayKey = `dq_masbaha_${new Date().toISOString().slice(0, 10)}`;
-      const saved = localStorage.getItem(todayKey);
-      if (saved) return parseInt(saved, 10) || 0;
+      const val = localStorage.getItem(todayKey);
+      if (val) return Number(val);
     }
     return 0;
   });
-
   const [masbahaTotalAll, setMasbahaTotalAll] = useState<number>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_masbaha_all');
-      if (saved) return parseInt(saved, 10) || 0;
+      const val = localStorage.getItem('dq_masbaha_all');
+      if (val) return Number(val);
     }
     return 0;
   });
@@ -252,19 +242,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_masbaha_sound');
-      if (saved !== null) return saved === 'true';
+      const val = localStorage.getItem('dq_masbaha_sound');
+      if (val !== null) return val === 'true';
+    }
+    return true;
+  });
+  const [vibrationEnabled, setVibrationEnabled] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const val = localStorage.getItem('dq_masbaha_vib');
+      if (val !== null) return val === 'true';
     }
     return true;
   });
 
-  const [vibrationEnabled, setVibrationEnabled] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('dq_masbaha_vib');
-      if (saved !== null) return saved === 'true';
-    }
-    return true;
-  });
+
 
   // Adhkar Progress
   const [completedAdhkar, setCompletedAdhkar] = useState<Record<string, number>>({});

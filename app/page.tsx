@@ -18,7 +18,7 @@ export default function MainPage() {
   const { activeTab } = useApp();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FBF8F1] dark:bg-[#081714] text-[#1B362F] dark:text-[#E2E8F0] relative">
+    <div suppressHydrationWarning className="min-h-screen flex flex-col bg-[#FBF8F1] dark:bg-[#081714] text-[#1B362F] dark:text-[#E2E8F0] relative">
       
       {/* Offline Status Alert */}
       <OfflineBanner />
