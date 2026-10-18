@@ -49,12 +49,17 @@
 }
 
 .dark .bg-islamic-pattern {
-  background-image: radial-gradient(rgba(201, 162, 39, 0.12) 1.5px, transparent 1.5px), radial-gradient(rgba(45, 166, 142, 0.08) 1.5px, transparent 1.5px);
+  background-image: radial-gradient(rgba(201, 162, 39, 0.14) 1.5px, transparent 1.5px), radial-gradient(rgba(31, 122, 102, 0.1) 1.5px, transparent 1.5px);
 }
 
 .bg-islamic-ornament {
   background-image: repeating-linear-gradient(45deg, rgba(201, 162, 39, 0.04) 0px, rgba(201, 162, 39, 0.04) 2px, transparent 2px, transparent 14px),
                     repeating-linear-gradient(-45deg, rgba(201, 162, 39, 0.04) 0px, rgba(201, 162, 39, 0.04) 2px, transparent 2px, transparent 14px);
+}
+
+.dark .bg-islamic-ornament {
+  background-image: repeating-linear-gradient(45deg, rgba(201, 162, 39, 0.08) 0px, rgba(201, 162, 39, 0.08) 2px, transparent 2px, transparent 14px),
+                    repeating-linear-gradient(-45deg, rgba(201, 162, 39, 0.08) 0px, rgba(201, 162, 39, 0.08) 2px, transparent 2px, transparent 14px);
 }
 
 /* Custom Scrollbar */
@@ -73,11 +78,15 @@
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(201, 162, 39, 0.3);
+  background: rgba(201, 162, 39, 0.35);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(15, 92, 77, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 162, 39, 0.6);
 }
 
 /* Ayah end ornament symbol */
@@ -96,4 +105,10 @@
   border-radius: 50%;
   position: relative;
   background: radial-gradient(circle, rgba(201, 162, 39, 0.12) 0%, transparent 80%);
+}
+
+.dark .ayah-number-badge {
+  color: #f3d982;
+  border-color: #d4af37;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 80%);
 }

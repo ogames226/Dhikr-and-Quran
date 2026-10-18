@@ -61,6 +61,17 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon.svg" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.getItem('dq_theme') === 'dark' || (!localStorage.getItem('dq_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body className="min-h-screen bg-[#FBF8F1] dark:bg-[#081714] text-[#1B362F] dark:text-[#E2E8F0] selection:bg-[#C9A227]/30 transition-colors duration-200">
         <AppProvider>
